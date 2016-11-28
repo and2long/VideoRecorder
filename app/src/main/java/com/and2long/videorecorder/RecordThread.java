@@ -27,6 +27,7 @@ public class RecordThread extends Thread {
     private boolean isRecording = false;
     //文件保存路径
     private File dir;
+    private Handler handler;
 
     public RecordThread(Context context, SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
@@ -35,7 +36,7 @@ public class RecordThread extends Thread {
 
     @Override
     public void run() {
-        final Handler handler = new Handler(Looper.getMainLooper());
+        handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
             public void run() {
