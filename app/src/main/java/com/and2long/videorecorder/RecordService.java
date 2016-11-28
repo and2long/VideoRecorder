@@ -71,5 +71,6 @@ public class RecordService extends Service implements SurfaceHolder.Callback {
     @Override
     public void onDestroy() {
         windowManager.removeView(mRecorderView);
+        recordThread.stopRecord();
     }
 }
