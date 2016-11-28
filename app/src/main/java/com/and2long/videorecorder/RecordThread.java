@@ -76,9 +76,11 @@ public class RecordThread extends Thread {
     public void startRecord() {
         try {
             mMediaRecorder = new MediaRecorder();
-            mCamera = getCameraInstance();
-            mCamera.setDisplayOrientation(90);
-            //解锁camera
+            if (mCamera == null) {
+                initCamera();
+            }
+            //取消录制后再次进行录制时必须加如下两步操作，不然会报错
+            mCamera.lock();
             mCamera.unlock();
             mMediaRecorder.setCamera(mCamera);
             mMediaRecorder.setOrientationHint(90);
@@ -102,6 +104,18 @@ public class RecordThread extends Thread {
         }
     }
 
+    private void initCamera() throws IOException {
+        mCamera = getCameraInstance();
+        mCamera.setDisplayOrientation(90);
+        mCamera.setPreviewDisplay(surfaceHolder);
+        mCamera.startPreview();
+        //解锁camera
+        mCamera.unlock();
+    }
+
+    public void stopRecord() {
+        handler.removeCallbacks(runnable);
+    }
 
     /**
      * 保存文件命名
