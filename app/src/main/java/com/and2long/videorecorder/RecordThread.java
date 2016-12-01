@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -105,15 +106,25 @@ public class RecordThread extends Thread {
         }
     }
 
-    private void initCamera() throws IOException {
+    /**
+     * 初始化摄像头
+     */
+    private void initCamera() {
         mCamera = getCameraInstance();
         mCamera.setDisplayOrientation(90);
-        mCamera.setPreviewDisplay(surfaceHolder);
+        try {
+            mCamera.setPreviewDisplay(surfaceHolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         mCamera.startPreview();
         //解锁camera
         mCamera.unlock();
     }
 
+    /**
+     * 停止录像
+     */
     public void stopRecord() {
         handler.removeCallbacks(runnable);
     }
